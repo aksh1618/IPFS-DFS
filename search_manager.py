@@ -10,7 +10,7 @@ UDP_PORT_NO_V6 = 43463
 SOCKET_TIMEOUT = 1
 
 class SearchManager:
-    
+
     def __init__(self, IPFS_API_PORT = 5001):
         # TODO: Make sure daemon is running.
         self.terminated = False
@@ -22,7 +22,7 @@ class SearchManager:
 
     def init_servers_and_listen(self):
         """Initialize ipv4 and ipv6 servers and start listening."""
-        
+
         self.server_socket_v6 = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM)
         self.server_socket_v6.bind(('::', UDP_PORT_NO_V6))
         self.server_socket_v6.settimeout(SOCKET_TIMEOUT)
@@ -30,11 +30,11 @@ class SearchManager:
         self.server_socket_v4.bind(('0.0.0.0', UDP_PORT_NO))
         self.server_socket_v4.settimeout(SOCKET_TIMEOUT)
         self.server_thread_v4 = threading.Thread(
-            target=self.listen_for_query, 
+            target=self.listen_for_query,
             args=(self.server_socket_v4,)
         )
         self.server_thread_v6 = threading.Thread(
-            target=self.listen_for_query, 
+            target=self.listen_for_query,
             args=(self.server_socket_v6,)
         )
         self.server_thread_v4.start()
@@ -80,6 +80,7 @@ class SearchManager:
         # self.server_thread_v4.join()
         # self.server_thread_v6.join()
 
+
     def close(self):
         self.terminated = True
 
@@ -91,6 +92,7 @@ def main():
     # s.close()
     # exit(0)
     print('end')
+
 
 if __name__ == '__main__':
     main()
