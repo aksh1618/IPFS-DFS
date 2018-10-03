@@ -69,7 +69,7 @@ class IpfsUtility:
                 new_object['size'] = fileobject['size']
             path_exists = False
             for i in temp[dir_or_file]:
-                if i['name'] == fileobject['name']:
+                if i['name'] == fullpath[-1]:
                     # Already exists
                     # TODO: Check hash to see if a newer version of file/directory is being added
                     path_exists = True
