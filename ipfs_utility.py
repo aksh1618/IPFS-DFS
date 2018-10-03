@@ -3,12 +3,12 @@ import os
 import pickle
 import subprocess
 
+
 class IpfsUtility:
 
-    def __init__(self, IPFS_API_PORT = 5001):
+    def __init__(self, IPFS_API_PORT=5001):
         self.api = ipfsapi.connect('127.0.0.1', IPFS_API_PORT)
         self.init_filelist()
-
 
     def add(self, path):
         pwd = os.getcwd()
@@ -18,7 +18,8 @@ class IpfsUtility:
         list_of_hashes = []
         # Size is None for directories
         # TODO: Validate path
-        file_hashes = str(subprocess.check_output(f'ipfs add -r {path}', shell=True, stderr=open(os.devnull, 'w'))).split('added')[1:]
+        file_hashes = str(subprocess.check_output(
+            f'ipfs add -r {path}', shell=True, stderr=open(os.devnull, 'w'))).split('added')[1:]
         file_hashes[-1] = file_hashes[-1][:-1]
         file_hashes = [x[1:-2] for x in file_hashes]
         for filehash in file_hashes:
@@ -26,22 +27,20 @@ class IpfsUtility:
             hash, name = filehash.split(' ')
             if os.path.isfile(name):
                 size = os.path.getsize(name)
-            list_of_hashes.append({'name' : name, 'hash' : hash, 'size' : size})
+            list_of_hashes.append({'name': name, 'hash': hash, 'size': size})
         os.chdir(pwd)
         self.add_to_filelist(list_of_hashes)
 
     # TODO: Move it to appropriate location where it runs during first run only
     def init_filelist(self):
-        filelist = {'directory' : [], 'file' : []}
+        filelist = {'directory': [], 'file': []}
         with open('own.filelist', 'wb') as f_list:
             pickle.dump(filelist, f_list, pickle.HIGHEST_PROTOCOL)
-
 
     def get_filelist(self):
         with open('own.filelist', 'rb') as f_list:
             filelist = pickle.load(f_list)
         return filelist
-
 
     def add_to_filelist(self, list_of_hashes):
         filelist = self.get_filelist()
@@ -56,10 +55,11 @@ class IpfsUtility:
                         path_exists = True
                         temp = i
                 if not path_exists:
-                    new_object = {'name' : path, 'directory' : [], 'file' : []}
+                    new_object = {'name': path, 'directory': [], 'file': []}
                     temp['directory'].append(new_object)
                     temp = new_object
-            new_object = {'name' : fullpath[-1], 'hash' : fileobject['hash'], 'directory' : [], 'file' : []}
+            new_object = {
+                'name': fullpath[-1], 'hash': fileobject['hash'], 'directory': [], 'file': []}
             if not fileobject['size']:
                 # Is a directory
                 dir_or_file = 'directory'
@@ -87,6 +87,7 @@ class IpfsUtility:
 def main():
     ipfs = IpfsUtility()
     ipfs.add('./test_dir')
+
 
 if __name__ == '__main__':
     main()
