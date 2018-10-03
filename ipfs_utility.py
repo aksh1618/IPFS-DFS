@@ -85,8 +85,7 @@ class IpfsUtility:
 # For testing purpose only
 def main():
 	ipfs = IpfsUtility()
-	ipfs.add('D://code')
+	ipfs.add('./test_dir')
 
 if __name__ == '__main__':
 	main()
-		
