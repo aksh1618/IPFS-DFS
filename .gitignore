@@ -3,6 +3,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# IPDC files
+*.filelist
+
 # C extensions
 *.so
 
