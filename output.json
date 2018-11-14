@@ -1,0 +1,21 @@
+{'directories': [
+        {'name': 'test_dir', 'directories': [
+                {'name': 'shared_folder', 'directories': [
+                        {'name': 'subdirectory', 'directories': [], 'files': [
+                                {'name': 'file1', 'hash': 'QmejGXmJf3S11jRWcJz9jiUZHv7RJUjvbvzL3RuX9V7Rm9', 'directories': [], 'files': [], 'size': 11
+                                }
+                            ]
+                        }
+                    ], 'files': [
+                        {'name': 'file1', 'hash': 'QmejGXmJf3S11jRWcJz9jiUZHv7RJUjvbvzL3RuX9V7Rm9', 'directories': [], 'files': [], 'size': 11
+                        },
+                        {'name': 'file2', 'hash': 'QmT3JCEu1JFPAZXqjHJc8r2cuCFnFFAzBf4xUmJ6BPmCm3', 'directories': [],'files': [], 'size': 12
+                        },
+                        {'name': 'file3', 'hash': 'QmZcjMF6jDtUjvzuNNvDUcj4qRvD8UnmvjwKxERdkucFnr', 'directories': [], 'files': [], 'size': 11
+                        }
+                    ]
+                }
+            ], 'files': []
+        }
+    ], 'files': []
+}

@@ -18,8 +18,8 @@ class SearchListener:
         self.terminated = False
         self.api = ipfsapi.connect('127.0.0.1', IPFS_API_PORT)
         self.previous_queries = collections.deque(maxlen=20)
+        # TODO: Should this be in init_servers_and_listen ?
         atexit.register(self.__cleanup)
-        self.init_servers_and_listen()
 
     def init_servers_and_listen(self):
         """Initialize ipv4 and ipv6 servers and start listening."""
