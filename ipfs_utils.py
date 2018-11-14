@@ -1,7 +1,8 @@
-import ipfsapi
 import os
 import pickle
 import subprocess
+
+import ipfsapi
 
 
 class IpfsUtils:
@@ -10,8 +11,10 @@ class IpfsUtils:
         # TODO: Move it to appropriate location where it runs during first run only
         self.init_filelist()
 
-    def add(self, path):
+    def add_to_ipfs(self, path):
         pwd = os.getcwd()
+        # TODO: Account for path being file path
+        # TODO: Send absolute path
         os.chdir(path)
         os.chdir("..")
 
@@ -32,7 +35,7 @@ class IpfsUtils:
                 size = os.path.getsize(name)
             list_of_hashes.append({"name": name, "hash": hash, "size": size})
         os.chdir(pwd)
-        self.add_to_filelist(list_of_hashes)
+        return list_of_hashes
 
     def init_filelist(self):
         filelist = {"directories": [], "files": []}
@@ -45,6 +48,7 @@ class IpfsUtils:
             filelist = pickle.load(f_list)
         return filelist
 
+    # TODO: This should be in main file.
     def add_to_filelist(self, list_of_hashes):
         filelist = self.get_filelist()
         for fileobject in list_of_hashes:
@@ -88,13 +92,12 @@ class IpfsUtils:
         with open("own.filelist", "wb") as f_list:
             pickle.dump(filelist, f_list, pickle.HIGHEST_PROTOCOL)
 
-
-# TODO: Remove this
-# For testing purpose only
-def main():
-    ipfs = IpfsUtils()
-    ipfs.add("./test_dir")
+    # TODO: This should be in main file.
+    def share(self, path):
+        list_of_hashes = self.add_to_ipfs(path)
+        self.add_to_filelist(list_of_hashes)
 
 
-if __name__ == "__main__":
-    main()
+# TODO:
+# Make everything static.
+# Move app utils to separate file

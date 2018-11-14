@@ -44,6 +44,7 @@ class SearchManager:
         results = []
         for _file in cur_dir["files"]:
             if SearchManager.__match(query_str, parent_str + _file["name"]):
+                _file["path"] = parent_str + _file["name"]
                 results.append(_file)
 
         for _dir in cur_dir["directories"]:
