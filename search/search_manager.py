@@ -1,7 +1,9 @@
 import atexit
 import collections
-import ipfsapi
 import socket
+
+import ipfsapi
+
 from ipfs_utils import IpfsUtils
 
 UDP_PORT_NO = 43462
@@ -34,21 +36,23 @@ class SearchManager:
     def search_filelist(self, query_str):
         own_filelist = IpfsUtils.get_filelist()
         print(own_filelist)
-        results = []
+        results = {}
         for token in query_str.split():
-            results += self.__recursive_search(own_filelist, "/", token)
-        return results
+            results[token] = results.get(token, []) + self.__recursive_search(
+                own_filelist, "/", token
+            )
+        return set(results.values()[0]).intersection(*results.values())
 
     @staticmethod
     def __recursive_search(cur_dir, parent_str, query_str):
         results = []
-        for file in cur_dir["files"]:
-            if __match(query_str, parent_str + file["name"]):
-                results.append(file)
+        for _file in cur_dir["files"]:
+            if SearchManager.__match(query_str, parent_str + _file["name"]):
+                results.append(_file)
 
         for _dir in cur_dir["directories"]:
-            results += self.__recursive_search(
-                _dir, f"{parent_str}{_dir['name']}/", query_str
+            results += SearchManager.__recursive_search(
+                _dir, f"{parent_str}/{_dir['name']}/", query_str
             )
 
         return results
