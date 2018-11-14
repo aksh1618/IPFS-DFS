@@ -1,11 +1,17 @@
 import atexit
 import collections
+import json
 import socket
 
 from util import IpfsUtils
+from util import filelist_utils
 
+TCP_PORT_NO = 43460
+TCP_PORT_NO_V6 = 43461
 UDP_PORT_NO = 43462
 UDP_PORT_NO_V6 = 43463
+
+SOCKET_TIMEOUT = 5
 
 
 class SearchManager:
@@ -34,13 +40,33 @@ class SearchManager:
     def get_search_results(self, query):
         self.send_search_query(query)
         # TODO: Listen for response and return results.
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        host = socket.gethostname()
+        s.bind((host, TCP_PORT_NO))
+        s.settimeout(SOCKET_TIMEOUT)
+
+        s.listen(5)
+        while True:
+            try:
+                c, addr = s.accept()
+                c.settimeout(SOCKET_TIMEOUT)
+                print('Got connection from', addr)
+                result_string = c.recv(1024)
+                result_string = result_string.decode()
+                result = json.loads(result_string)
+                print(result)
+                c.close()
+            except:
+                break
+        s.close
         results = []
         return results
 
-    def search_filelist(self, query_str):
-        own_filelist = IpfsUtils.get_filelist()
+    @staticmethod
+    def search_filelist(query_str):
+        own_filelist = filelist_utils.get_filelist()
         print(own_filelist)
-        results = self.__recursive_search(own_filelist, "/", query_str)
+        results = SearchManager.__recursive_search(own_filelist, "/", query_str)
         return results
 
     @staticmethod

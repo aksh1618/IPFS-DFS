@@ -1,9 +1,14 @@
 import atexit
 import collections
+import json
 import socket
 import threading
 import time
 
+from search import SearchManager
+
+TCP_PORT_NO = 43460
+TCP_PORT_NO_V6 = 43461
 UDP_PORT_NO = 43462
 UDP_PORT_NO_V6 = 43463
 SOCKET_TIMEOUT = 1
@@ -45,10 +50,14 @@ class SearchListener:
     def __listen_for_query(self, server_socket):
         while not self.terminated:
             try:
-                data, addr = server_socket.recvfrom(1024)
-                print(f"Message: {data}, from: {addr}")
+                query, addr = server_socket.recvfrom(1024)
+                print(f"Message: {query}, from: {addr}")
                 if addr not in self.previous_queries:
-                    # TODO: handle this request
+                    result = SearchManager.search_filelist(str(query))
+                    result_string = json.dumps(result)
+                    s = socket.create_connection((addr[0], TCP_PORT_NO))
+                    s.send(result_string.encode())
+                    s.close
                     # TODO: Check if needed
                     self.previous_queries.append(addr)
                 else:

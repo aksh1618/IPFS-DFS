@@ -13,7 +13,7 @@ def main():
     api = ipfsapi.connect("127.0.0.1", "5001")
     ipfs_utils = IpfsUtils(api)
     ipfs_utils.share("./test_dir")
-    SearchManager(api).search_filelist("file1")
+    SearchManager.search_filelist("file1")
     # search_listener = SearchListener(api)
     # search_listener.init_servers_and_listen()
     # time.sleep(TEST_LIFE)
