@@ -1,8 +1,7 @@
 import ipfsapi
 
-from search.search_listener import SearchListener
-from search.search_manager import SearchManager
-from util.ipfs_utils import IpfsUtils
+from search import SearchListener, SearchManager
+from util import IpfsUtils
 
 
 class Dfs:
