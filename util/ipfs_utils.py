@@ -2,6 +2,9 @@ import os
 import pickle
 import subprocess
 
+# TODO: Get this from config
+FILELIST_PATH = os.path.abspath("../test/own.filelist")
+
 
 class IpfsUtils:
     def __init__(self, api):
@@ -42,12 +45,12 @@ class IpfsUtils:
 
     def init_filelist(self):
         filelist = {"directories": [], "files": []}
-        with open("own.filelist", "wb") as f_list:
+        with open(FILELIST_PATH, "wb") as f_list:
             pickle.dump(filelist, f_list, pickle.HIGHEST_PROTOCOL)
 
     @staticmethod
     def get_filelist():
-        with open("own.filelist", "rb") as f_list:
+        with open(FILELIST_PATH, "rb") as f_list:
             filelist = pickle.load(f_list)
         return filelist
 
@@ -100,7 +103,7 @@ class IpfsUtils:
 
         # TODO: Remove this later
         print(filelist)
-        with open("own.filelist", "wb") as f_list:
+        with open(FILELIST_PATH, "wb") as f_list:
             pickle.dump(filelist, f_list, pickle.HIGHEST_PROTOCOL)
 
     # TODO: Should this be in main file?
@@ -111,4 +114,5 @@ class IpfsUtils:
 
 # TODO:
 # Make everything static.
+# Or remove the class altogether in favor of top level functions.
 # Move app utils to separate file.
