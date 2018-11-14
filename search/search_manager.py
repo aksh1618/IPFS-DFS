@@ -2,7 +2,7 @@ import atexit
 import collections
 import socket
 
-from ipfs_utils import IpfsUtils
+from util import IpfsUtils
 
 UDP_PORT_NO = 43462
 UDP_PORT_NO_V6 = 43463
