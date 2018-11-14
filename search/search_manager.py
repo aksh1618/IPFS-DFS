@@ -2,8 +2,6 @@ import atexit
 import collections
 import socket
 
-import ipfsapi
-
 from ipfs_utils import IpfsUtils
 
 UDP_PORT_NO = 43462
@@ -13,9 +11,9 @@ UDP_PORT_NO_V6 = 43463
 class SearchManager:
     """Methods for managing search operations."""
 
-    def __init__(self, IPFS_API_PORT=5001):
+    def __init__(self, api):
         # TODO: Make sure daemon is running.
-        self.api = ipfsapi.connect("127.0.0.1", IPFS_API_PORT)
+        self.api = api
 
     def send_search_query(self, query):
         """Send search query to peers in swarms over UDP."""
@@ -32,6 +30,12 @@ class SearchManager:
                 except:
                     # TODO: Log, not print
                     print(ip)
+
+    def get_search_results(self, query):
+        self.send_search_query(query)
+        # TODO: Listen for response and return results.
+        results = []
+        return results
 
     def search_filelist(self, query_str):
         own_filelist = IpfsUtils.get_filelist()

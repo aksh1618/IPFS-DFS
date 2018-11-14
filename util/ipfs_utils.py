@@ -2,12 +2,10 @@ import os
 import pickle
 import subprocess
 
-import ipfsapi
-
 
 class IpfsUtils:
-    def __init__(self, IPFS_API_PORT=5001):
-        self.api = ipfsapi.connect("127.0.0.1", IPFS_API_PORT)
+    def __init__(self, api):
+        self.api = api
         # TODO: Move it to appropriate location where it runs during first run only
         self.init_filelist()
 
@@ -27,7 +25,7 @@ class IpfsUtils:
                     f"ipfs add -r {path}", shell=True, stderr=open(os.devnull, "w")
                 )
             ).split("added")[1:]
-        except :
+        except:
             # File addition failed!
             # TODO: Handle it
             return
@@ -56,11 +54,11 @@ class IpfsUtils:
     # TODO: This should be in main file.
     def add_to_filelist(self, list_of_hashes):
         filelist = self.get_filelist()
-        
+
         for fileobject in list_of_hashes:
             temp_filelist = filelist
             fullpath = fileobject["name"].split("/")
-            
+
             for path in fullpath[:-1]:
                 path_exists = False
                 for i in temp_filelist["directories"]:
@@ -72,13 +70,10 @@ class IpfsUtils:
                     new_object = {"name": path, "directories": [], "files": []}
                     temp_filelist["directories"].append(new_object)
                     temp_filelist = new_object
-            
+
             name = fullpath[-1]
-            new_object = {
-                "name": name,
-                "hash": fileobject["hash"]
-            }
-            
+            new_object = {"name": name, "hash": fileobject["hash"]}
+
             if not fileobject["size"]:
                 # Is a directory
                 new_object["directories"] = []
@@ -88,9 +83,9 @@ class IpfsUtils:
                 # Is a file
                 dir_or_file = "files"
                 new_object["size"] = fileobject["size"]
-            
+
             path_exists = False
-            
+
             for i in temp_filelist[dir_or_file]:
                 if i["name"] == name:
                     # Already exists
@@ -98,7 +93,7 @@ class IpfsUtils:
                     path_exists = True
                     temp_filelist = i
                     break
-            
+
             if not path_exists:
                 temp_filelist[dir_or_file].append(new_object)
                 temp_filelist = new_object
@@ -108,7 +103,7 @@ class IpfsUtils:
         with open("own.filelist", "wb") as f_list:
             pickle.dump(filelist, f_list, pickle.HIGHEST_PROTOCOL)
 
-    # TODO: This should be in main file.
+    # TODO: Should this be in main file?
     def share(self, path):
         list_of_hashes = self.add_to_ipfs(path)
         self.add_to_filelist(list_of_hashes)
@@ -116,4 +111,4 @@ class IpfsUtils:
 
 # TODO:
 # Make everything static.
-# Move app utils to separate file
+# Move app utils to separate file.
