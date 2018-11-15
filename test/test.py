@@ -22,3 +22,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# TODO: Things to test:
+# config.is_first_run is false in future runs.
