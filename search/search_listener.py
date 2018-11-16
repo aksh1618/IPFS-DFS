@@ -55,9 +55,13 @@ class SearchListener:
                 if addr not in self.previous_queries:
                     result = SearchManager.search_filelist(str(query))
                     result_string = json.dumps(result)
-                    s = socket.create_connection((addr[0], TCP_PORT_NO))
-                    s.send(result_string.encode())
-                    s.close
+                    try:
+                        s = socket.create_connection((addr[0], TCP_PORT_NO))
+                        s.send(result_string.encode())
+                        s.close
+                    except:
+                        # Log it
+                        pass
                     # TODO: Check if needed
                     self.previous_queries.append(addr)
                 else:

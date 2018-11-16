@@ -15,11 +15,11 @@ class IpfsUtils:
         filelist_utils.init_filelist()
 
     def add_to_ipfs(self, path):
-        pwd = os.getcwd()
-        # TODO: Account for path being file path
         # TODO: Send absolute path
-        os.chdir(path)
-        os.chdir("..")
+        
+        if not os.path.exists(path):
+            # Invalid path
+            return []
 
         list_of_hashes = []
         # Size is None for directories
@@ -33,7 +33,7 @@ class IpfsUtils:
         except:
             # File addition failed!
             # TODO: Handle it
-            return
+            return []
         file_hashes[-1] = file_hashes[-1][:-1]
         file_hashes = [x[1:-2] for x in file_hashes]
         for filehash in file_hashes:
@@ -42,7 +42,6 @@ class IpfsUtils:
             if os.path.isfile(name):
                 size = os.path.getsize(name)
             list_of_hashes.append({"name": name, "hash": hash, "size": size})
-        os.chdir(pwd)
         return list_of_hashes
 
     # TODO: Should this be in main file?

@@ -40,26 +40,31 @@ class SearchManager:
     def get_search_results(self, query):
         self.send_search_query(query)
         # TODO: Listen for response and return results.
+        results = []
+        
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        host = socket.gethostname()
-        s.bind((host, TCP_PORT_NO))
+        s.bind(("localhost", TCP_PORT_NO))
         s.settimeout(SOCKET_TIMEOUT)
 
         s.listen(5)
         while True:
             try:
                 c, addr = s.accept()
-                c.settimeout(SOCKET_TIMEOUT)
-                print('Got connection from', addr)
-                result_string = c.recv(1024)
-                result_string = result_string.decode()
-                result = json.loads(result_string)
-                print(result)
+                try:
+                    c.settimeout(SOCKET_TIMEOUT)
+                    print("Got connection from", addr)
+                    result_string = c.recv(1024)
+                    result_string = result_string.decode()
+                    result = json.loads(result_string)
+                    print(result)
+                    results.append(result)
+                except:
+                    pass
                 c.close()
             except:
                 break
         s.close
-        results = []
+
         return results
 
     @staticmethod
