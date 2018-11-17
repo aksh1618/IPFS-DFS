@@ -5,7 +5,7 @@ import socket
 import threading
 import time
 
-from search import SearchManager
+from util import filelist_utils
 
 TCP_PORT_NO = 43460
 TCP_PORT_NO_V6 = 43461
@@ -53,7 +53,7 @@ class SearchListener:
                 query, addr = server_socket.recvfrom(1024)
                 print(f"Message: {query}, from: {addr}")
                 if addr not in self.previous_queries:
-                    result = SearchManager.search_filelist(str(query))
+                    result = filelist_utils.search_filelist(str(query))
                     result_string = json.dumps(result)
                     try:
                         s = socket.create_connection((addr[0], TCP_PORT_NO))

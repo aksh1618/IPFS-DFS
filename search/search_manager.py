@@ -3,8 +3,7 @@ import collections
 import json
 import socket
 
-from util import IpfsUtils
-from util import filelist_utils
+from util import IpfsUtils, filelist_utils
 
 TCP_PORT_NO = 43460
 TCP_PORT_NO_V6 = 43461
@@ -41,7 +40,7 @@ class SearchManager:
         self.send_search_query(query)
         # TODO: Listen for response and return results.
         results = []
-        
+
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.bind(("localhost", TCP_PORT_NO))
         s.settimeout(SOCKET_TIMEOUT)
@@ -66,29 +65,3 @@ class SearchManager:
         s.close
 
         return results
-
-    @staticmethod
-    def search_filelist(query_str):
-        own_filelist = filelist_utils.get_filelist()
-        print(own_filelist)
-        results = SearchManager.__recursive_search(own_filelist, "/", query_str)
-        return results
-
-    @staticmethod
-    def __recursive_search(cur_dir, parent_str, query_str):
-        results = []
-        for _file in cur_dir["files"]:
-            if SearchManager.__match(query_str, parent_str + _file["name"]):
-                _file["path"] = parent_str + _file["name"]
-                results.append(_file)
-
-        for _dir in cur_dir["directories"]:
-            results += SearchManager.__recursive_search(
-                _dir, f"{parent_str}/{_dir['name']}/", query_str
-            )
-
-        return results
-
-    @staticmethod
-    def __match(pattern, text):
-        return all([word in text for word in pattern.split()])

@@ -8,6 +8,7 @@ from util import filelist_utils
 FILELIST_PATH = os.path.abspath("../test/own.filelist")
 
 
+# TODO: Remove class.
 class IpfsUtils:
     def __init__(self, api):
         self.api = api
@@ -16,7 +17,7 @@ class IpfsUtils:
 
     def add_to_ipfs(self, path):
         # TODO: Send absolute path
-        
+
         if not os.path.exists(path):
             # Invalid path
             return []
@@ -43,11 +44,6 @@ class IpfsUtils:
                 size = os.path.getsize(name)
             list_of_hashes.append({"name": name, "hash": hash, "size": size})
         return list_of_hashes
-
-    # TODO: Should this be in main file?
-    def share(self, path):
-        list_of_hashes = self.add_to_ipfs(path)
-        filelist_utils.add_to_filelist(list_of_hashes)
 
 
 # TODO:

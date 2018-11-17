@@ -1,7 +1,7 @@
 import ipfsapi
 
 from search import SearchListener, SearchManager
-from util import IpfsUtils
+from util import IpfsUtils, filelist_utils
 
 
 class Dfs:
@@ -21,7 +21,8 @@ class Dfs:
 
     def share(self, path):
         """Share file(s)/directory(ies)."""  # TODO: Check what to do about the 'y'
-        IpfsUtils(self.api).share(path)
+        list_of_hashes = IpfsUtils(self.api).add_to_ipfs(path)
+        filelist_utils.add_to_filelist(list_of_hashes)
 
     def download(self):
         """Download a file."""
