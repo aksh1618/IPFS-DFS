@@ -1,3 +1,5 @@
+import time
+
 import ipfsapi
 
 from search import SearchListener, SearchManager
@@ -9,15 +11,13 @@ class Dfs:
 
     def __init__(self, IPFS_API_PORT=5001):
         self.api = ipfsapi.connect("127.0.0.1", IPFS_API_PORT)
-        # search_listener = SearchListener(api)
-        # search_listener.init_servers_and_listen()
-        # time.sleep(TEST_LIFE)
-        # search_listener.close()
+        self.search_listener = SearchListener(self.api)
+        self.search_listener.init_servers_and_listen()
 
     def search(self, query):
         """Send search request."""
         search_results = SearchManager(self.api).get_search_results(query)
-        # TODO: Send back to UI
+        return search_results
 
     def share(self, path):
         """Share file(s)/directory(ies)."""  # TODO: Check what to do about the 'y'
@@ -27,3 +27,7 @@ class Dfs:
     def download(self):
         """Download a file."""
         # TODO: Implement.
+
+    def cleanup(self, after_seconds):
+        time.sleep(after_seconds)
+        self.search_listener.close()

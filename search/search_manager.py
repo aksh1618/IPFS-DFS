@@ -2,6 +2,7 @@ import atexit
 import collections
 import json
 import socket
+import traceback
 
 from util import IpfsUtils, filelist_utils
 
@@ -34,6 +35,7 @@ class SearchManager:
                     client_v6.sendto(query.encode(), (ip, UDP_PORT_NO_V6))
                 except:
                     # TODO: Log, not print
+                    traceback.print_exc()
                     print(ip)
 
     def get_search_results(self, query):
@@ -48,6 +50,7 @@ class SearchManager:
         s.listen(5)
         while True:
             try:
+                # TODO: Use context manager.
                 c, addr = s.accept()
                 try:
                     c.settimeout(SOCKET_TIMEOUT)
@@ -61,7 +64,8 @@ class SearchManager:
                     pass
                 c.close()
             except:
+                traceback.print_exc()
                 break
-        s.close
+        s.close()
 
         return results

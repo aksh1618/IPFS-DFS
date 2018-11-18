@@ -4,6 +4,7 @@ import json
 import socket
 import threading
 import time
+import traceback
 
 from util import filelist_utils
 
@@ -61,6 +62,7 @@ class SearchListener:
                         s.close
                     except:
                         # Log it
+                        traceback.print_exc()
                         pass
                     # TODO: Check if needed
                     self.previous_queries.append(addr)
@@ -68,6 +70,7 @@ class SearchListener:
                     # This request has already been served. Ignore it.
                     pass
             except:
+                traceback.print_exc()
                 # print('trying')
                 continue
 

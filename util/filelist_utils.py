@@ -7,12 +7,6 @@ def init_filelist():
         pickle.dump(filelist, f_list, pickle.HIGHEST_PROTOCOL)
 
 
-def get_filelist():
-    with open("own.filelist", "rb") as f_list:
-        filelist = pickle.load(f_list)
-    return filelist
-
-
 # TODO: This should be in main file.
 def add_to_filelist(list_of_hashes):
     filelist = get_filelist()
@@ -66,10 +60,17 @@ def add_to_filelist(list_of_hashes):
         pickle.dump(filelist, f_list, pickle.HIGHEST_PROTOCOL)
 
 
+def get_filelist():
+    with open("test/own.filelist", "rb") as f_list:
+        filelist = pickle.load(f_list)
+    return filelist
+
+
+# TODO: Find a better place for this.
 def search_filelist(query_str):
     own_filelist = get_filelist()
-    print(own_filelist)
     results = __recursive_search(own_filelist, "/", query_str)
+    print(results)
     return results
 
 
@@ -81,7 +82,7 @@ def __recursive_search(cur_dir, parent_str, query_str):
             results.append(_file)
 
     for _dir in cur_dir["directories"]:
-        results += __recursive_search(_dir, f"{parent_str}/{_dir['name']}/", query_str)
+        results += __recursive_search(_dir, f"{parent_str}{_dir['name']}/", query_str)
 
     return results
 

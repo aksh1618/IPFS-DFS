@@ -1,6 +1,7 @@
 import os
 import pickle
 import subprocess
+import traceback
 
 from util import filelist_utils
 
@@ -34,6 +35,7 @@ class IpfsUtils:
         except:
             # File addition failed!
             # TODO: Handle it
+            traceback.print_exc()
             return []
         file_hashes[-1] = file_hashes[-1][:-1]
         file_hashes = [x[1:-2] for x in file_hashes]
