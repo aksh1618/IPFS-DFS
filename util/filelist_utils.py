@@ -1,4 +1,5 @@
 import pickle
+from pathlib import Path
 from util import config_utils
 
 FILELIST_PATH = config_utils.get_config()["paths"]["own_filelist"]
@@ -6,6 +7,7 @@ FILELIST_PATH = config_utils.get_config()["paths"]["own_filelist"]
 
 def init_filelist():
     filelist = {"directories": [], "files": []}
+    Path(FILELIST_PATH).parent.mkdir(parents=True, exist_ok=True)
     with open(FILELIST_PATH, "wb") as f_list:
         pickle.dump(filelist, f_list, pickle.HIGHEST_PROTOCOL)
 
