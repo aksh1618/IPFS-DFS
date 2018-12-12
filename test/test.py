@@ -17,5 +17,10 @@ def test_search(query):
     print(results)
     dfs_instance.cleanup(TEST_LIFE)
 
+def test_download(file_hash):
+    dfs_instance = Dfs()
+    ss = dfs_instance.download(file_hash, "hello.txt")
+    print(ss)
+
 # TODO: Things to test:
 # config.is_first_run is false in future runs.

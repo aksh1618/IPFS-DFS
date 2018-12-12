@@ -30,9 +30,15 @@ class Dfs:
         filelist_utils.add_to_filelist(list_of_hashes)
         return True
 
-    def download(self):
+    def download(self, file_hash, file_name):
         """Download a file."""
-        # TODO: Implement.
+        # TODO: Decide on download location.
+        try:
+            self.api.get(file_hash)
+            os.rename(file_hash, file_name)
+            return True
+        except:
+            return False
 
     def cleanup(self, after_seconds):
         time.sleep(after_seconds)
