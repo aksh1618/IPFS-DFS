@@ -24,6 +24,10 @@ def get_config():
     """Get current config."""
     config = ConfigParser()
     config.read(CONFIG_FILE_PATH)
+    # TODO: Fix this.
+    if not "paths" in config:
+        init_config()
+        config.read(CONFIG_FILE_PATH)
     return config
 
 
