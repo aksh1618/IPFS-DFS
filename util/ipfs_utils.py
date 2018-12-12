@@ -2,6 +2,7 @@ import os
 import pickle
 import subprocess
 import traceback
+from pathlib import Path
 
 from util import filelist_utils
 
@@ -36,11 +37,14 @@ class IpfsUtils:
             return []
         file_hashes[-1] = file_hashes[-1][:-1]
         file_hashes = [x[1:-2] for x in file_hashes]
+        print(os.getcwd())
         for filehash in file_hashes:
             size = None
             hash, name = filehash.split(" ")
-            if os.path.isfile(name):
-                size = os.path.getsize(name)
+            full_name = Path(path).parent / name
+            # print(full_name)
+            if os.path.isfile(full_name):
+                size = os.path.getsize(full_name)
             list_of_hashes.append({"name": name, "hash": hash, "size": size})
         return list_of_hashes
 
