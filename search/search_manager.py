@@ -3,8 +3,9 @@ import collections
 import json
 import socket
 import traceback
+import threading
 
-from util import IpfsUtils, filelist_utils
+from util import filelist_utils
 
 TCP_PORT_NO = 43460
 TCP_PORT_NO_V6 = 43461
@@ -39,15 +40,15 @@ class SearchManager:
                     print(ip)
 
     def get_search_results(self, query):
-        self.send_search_query(query)
         # TODO: Listen for response and return results.
         results = []
 
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.bind(("localhost", TCP_PORT_NO))
+        s.bind(("0.0.0.0", TCP_PORT_NO))
         s.settimeout(SOCKET_TIMEOUT)
 
         s.listen(5)
+        threading.Thread(self.send_search_query,(query,)).start()
         while True:
             try:
                 # TODO: Use context manager.

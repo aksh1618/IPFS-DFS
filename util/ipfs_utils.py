@@ -5,16 +5,13 @@ import traceback
 
 from util import filelist_utils
 
-# TODO: Get this from config
-FILELIST_PATH = os.path.abspath("../test/own.filelist")
-
 
 # TODO: Remove class.
 class IpfsUtils:
     def __init__(self, api):
         self.api = api
         # TODO: Move it to appropriate location where it runs during first run only
-        filelist_utils.init_filelist()
+        # filelist_utils.init_filelist()
 
     def add_to_ipfs(self, path):
         # TODO: Send absolute path

@@ -1,9 +1,12 @@
 import pickle
+from util import config_utils
+
+FILELIST_PATH = config_utils.get_config()["paths"]["own_filelist"]
 
 
 def init_filelist():
     filelist = {"directories": [], "files": []}
-    with open("own.filelist", "wb") as f_list:
+    with open(FILELIST_PATH, "wb") as f_list:
         pickle.dump(filelist, f_list, pickle.HIGHEST_PROTOCOL)
 
 
@@ -56,12 +59,12 @@ def add_to_filelist(list_of_hashes):
 
     # TODO: Remove this later
     print(filelist)
-    with open("own.filelist", "wb") as f_list:
+    with open(FILELIST_PATH, "wb") as f_list:
         pickle.dump(filelist, f_list, pickle.HIGHEST_PROTOCOL)
 
 
 def get_filelist():
-    with open("test/own.filelist", "rb") as f_list:
+    with open(FILELIST_PATH, "rb") as f_list:
         filelist = pickle.load(f_list)
     return filelist
 

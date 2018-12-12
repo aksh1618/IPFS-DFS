@@ -55,6 +55,7 @@ class SearchListener:
                 print(f"Message: {query}, from: {addr}")
                 if addr not in self.previous_queries:
                     result = filelist_utils.search_filelist(str(query))
+                    print(result)
                     result_string = json.dumps(result)
                     try:
                         s = socket.create_connection((addr[0], TCP_PORT_NO))
@@ -70,7 +71,7 @@ class SearchListener:
                     # This request has already been served. Ignore it.
                     pass
             except:
-                traceback.print_exc()
+                # traceback.print_exc()
                 # print('trying')
                 continue
 

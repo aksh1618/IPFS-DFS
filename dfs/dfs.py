@@ -1,18 +1,22 @@
+import os
 import time
 
 import ipfsapi
 
 from search import SearchListener, SearchManager
-from util import IpfsUtils, filelist_utils
+from util import ipfs_utils, filelist_utils, config_utils
 
 
 class Dfs:
     """Main application functions."""
 
     def __init__(self, IPFS_API_PORT=5001):
-        self.api = ipfsapi.connect("127.0.0.1", IPFS_API_PORT)
+        config_utils.init_config()
+        self.api = ipfsapi.connect("localhost", IPFS_API_PORT)
         self.search_listener = SearchListener(self.api)
         self.search_listener.init_servers_and_listen()
+        # TODO: Ensure that this runs only once
+        filelist_utils.init_filelist()
 
     def search(self, query):
         """Send search request."""
@@ -21,8 +25,10 @@ class Dfs:
 
     def share(self, path):
         """Share file(s)/directory(ies)."""  # TODO: Check what to do about the 'y'
-        list_of_hashes = IpfsUtils(self.api).add_to_ipfs(path)
+        if not os.path.exists(path): return False
+        list_of_hashes = ipfs_utils.IpfsUtils(self.api).add_to_ipfs(path)
         filelist_utils.add_to_filelist(list_of_hashes)
+        return True
 
     def download(self):
         """Download a file."""
