@@ -48,7 +48,7 @@ class SearchManager:
         s.settimeout(SOCKET_TIMEOUT)
 
         s.listen(5)
-        threading.Thread(self.send_search_query,(query,)).start()
+        threading.Thread(target=self.send_search_query, args=(query,)).start()
         while True:
             try:
                 # TODO: Use context manager.
