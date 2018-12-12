@@ -1,5 +1,6 @@
 import pickle
 from pathlib import Path
+
 from util import config_utils
 
 FILELIST_PATH = config_utils.get_config()["paths"]["own_filelist"]
@@ -75,7 +76,7 @@ def get_filelist():
 def search_filelist(query_str):
     own_filelist = get_filelist()
     results = __recursive_search(own_filelist, "/", query_str)
-    print(results)
+    # print(results)
     return results
 
 
@@ -93,4 +94,6 @@ def __recursive_search(cur_dir, parent_str, query_str):
 
 
 def __match(pattern, text):
+    pattern = pattern.lower()
+    text = text.lower()
     return all([word in text for word in pattern.split()])

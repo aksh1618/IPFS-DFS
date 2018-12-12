@@ -2,8 +2,8 @@ import atexit
 import collections
 import json
 import socket
-import traceback
 import threading
+import traceback
 
 from util import filelist_utils
 
@@ -27,8 +27,10 @@ class SearchManager:
         peers = self.api.swarm_peers()["Peers"]
         client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         client_v6 = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM)
-        for peer in peers:
-            ip = peer["Addr"].split("/")[2]
+        # for peer in peers:
+        # ip = peer["Addr"].split("/")[2]
+        for peer in range(1):
+            ip = "localhost"
             try:
                 client.sendto(query.encode(), (ip, UDP_PORT_NO))
             except:
@@ -44,6 +46,8 @@ class SearchManager:
         results = []
 
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        # Override 'OSError: [Errno 98] Address already in use'
+        s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         s.bind(("0.0.0.0", TCP_PORT_NO))
         s.settimeout(SOCKET_TIMEOUT)
 
@@ -56,11 +60,12 @@ class SearchManager:
                 try:
                     c.settimeout(SOCKET_TIMEOUT)
                     print("Got connection from", addr)
-                    result_string = c.recv(1024)
+                    result_string = c.recv(4096)
                     result_string = result_string.decode()
+                    # print(f"received & decoded: {result_string}")
                     result = json.loads(result_string)
-                    print(result)
-                    results.append(result)
+                    print(f"Received from {addr}: {result}")
+                    results += result
                 except:
                     pass
                 c.close()

@@ -19,15 +19,15 @@ class IpfsUtils:
 
         if not os.path.exists(path):
             # Invalid path
+            print(f"Doesn't exist: {path}")
             return []
 
         list_of_hashes = []
         # Size is None for directories
-        # TODO: Validate path
         try:
             file_hashes = str(
                 subprocess.check_output(
-                    f"ipfs add -r {path}", shell=True, stderr=open(os.devnull, "w")
+                    f"ipfs add -r '{path}'", shell=True, stderr=open(os.devnull, "w")
                 )
             ).split("added")[1:]
         except:
@@ -40,7 +40,8 @@ class IpfsUtils:
         print(os.getcwd())
         for filehash in file_hashes:
             size = None
-            hash, name = filehash.split(" ")
+            space_index = filehash.index(" ")
+            hash, name = filehash[:space_index], filehash[space_index + 1 :]
             full_name = Path(path).parent / name
             # print(full_name)
             if os.path.isfile(full_name):
