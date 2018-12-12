@@ -52,6 +52,7 @@ class SearchListener:
         while not self.terminated:
             try:
                 query, addr = server_socket.recvfrom(1024)
+                query = query.decode()
                 print(f"Message: {query}, from: {addr}")
                 if addr not in self.previous_queries:
                     result = filelist_utils.search_filelist(str(query))
