@@ -27,10 +27,10 @@ class SearchManager:
         peers = self.api.swarm_peers()["Peers"]
         client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         client_v6 = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM)
-        # for peer in peers:
-        # ip = peer["Addr"].split("/")[2]
-        for peer in range(1):
-            ip = "localhost"
+        # for peer in range(1):
+        #     ip = "localhost"
+        for peer in peers:
+            ip = peer["Addr"].split("/")[2]
             try:
                 client.sendto(query.encode(), (ip, UDP_PORT_NO))
             except:

@@ -1,4 +1,7 @@
+import os
 import random
+import subprocess
+import traceback
 from pathlib import Path
 
 import toga
@@ -7,6 +10,7 @@ from toga.style.pack import *
 from dfs import Dfs
 
 ### TODO: Make OS call ipfs swarm connect /ip4/13.76.195.242/tcp/4001/ipfs/QmU5a4TYjuiuBdQwU2ycm6ArTTwWatWVUTS3w93cJKedKU (IPDC)
+CONNECT_COMMAND = "ipfs swarm connect /ip4/13.76.195.242/tcp/4001/ipfs/QmU5a4TYjuiuBdQwU2ycm6ArTTwWatWVUTS3w93cJKedKU"
 
 
 class DfsApp(toga.App):
@@ -48,13 +52,13 @@ class DfsApp(toga.App):
             self.share,
             label="Add File",
             tooltip="Select file to share",
-            icon=Path("./res/icons/baseline_add_white_18dp.png").absolute(),
+            icon=Path("./res/icons/baseline_add_black_18dp.png").absolute(),
         )
         add_folder_cmd = toga.Command(
             self.share,
             label="Add Folder",
             tooltip="Select folder to share",
-            icon=Path("./res/icons/baseline_add_white_18dp.png").absolute(),
+            icon=Path("./res/icons/baseline_add_black_18dp.png").absolute(),
         )
         # self.commands.add(add_file_cmd)
         self.main_window.toolbar.add(add_file_cmd, add_folder_cmd)
@@ -87,12 +91,18 @@ class DfsApp(toga.App):
             try:
                 self.dfs.download(row.hash, row.name)
             except:
-                error(f"Failed to download {row.name}!")
+                self.error(f"Failed to download {row.name}!")
                 self.log("Download failed", row.name)
                 traceback.print_exc()
             self.log("Download completed", row.name)
 
     def search(self, widget):
+        try:
+            subprocess.check_output(
+                        CONNECT_COMMAND, shell=True, stderr=open(os.devnull, "w")
+                    )
+        except:
+            self.error("No peers found!")
         self.search_results_table.data = []
         query = self.search_query_input.value
         print(f"Searching for {query}")
